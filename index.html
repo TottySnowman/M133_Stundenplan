@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stundenplan GIBM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <label for="Beruf">Beruf auswählen:</label>
+    <select name="Beruf" id="berufe" onchange="getKlasse()"></select>
+
+
+    <label for="Klasse">Klasse auswählen:</label>
+    <select name="Klasse" id="class" onchange="getStundenplan()"></select>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var url = "http://sandbox.gibm.ch/berufe.php";
+        $.getJSON(url)
+            .done(function (data) {
+                $.each(data, function () {
+                    $("#berufe").append($("<option></option>").val(this['beruf_id']).html(this['beruf_name']));
+                });
+
+            })
+
+            .fail(function () {
+                console.log("Fail");
+            })
+
+
+        function getKlasse() {
+            $("#class").empty().append('<option selected="selected" value="">Klasse auswählen</option>');
+            var url2 = "http://sandbox.gibm.ch/klassen.php?beruf_id=" + $("#berufe").val();
+            $.getJSON(url2)
+                .done(function (data) {
+
+                    $.each(data, function () {
+                        $("#class").append($("<option></option>").val(this['klasse_id']).html(this['klasse_longname']));
+                    });
+
+                })
+
+                .fail(function () {
+                    console.log("Fail");
+                })
+        }
+
+        function getStundenplan() {
+            var url3 = "http://sandbox.gibm.ch/tafel.php?klasse_id=" + $("#class").val();
+            $.getJSON(url3)
+                .done(function (data) {
+
+                    $.each(data, function () {
+                        console.log(this["tafel_lehrer"])
+                    });
+
+                })
+
+                .fail(function () {
+                    console.log("Fail");
+                })
+        }
+
+    </script>
+</body>
+
+</html>

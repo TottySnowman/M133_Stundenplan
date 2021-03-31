@@ -2,22 +2,34 @@ var url = "http://sandbox.gibm.ch/berufe.php";
         moment.locale("de");
         let iCWeek = moment().week();
         let iProfessionID, iClassID;
-        $("#berufe").append($("<option>Beruf auswählen</option>"));
+
+        $( document ).ready(function()
+        {
+            setSettings();
+            $("#berufe").append($("<option>Beruf auswählen</option>"));
         $.getJSON(url)
             .done(function (data) {
                 $.each(data, function () {
                     $("#berufe").append($("<option></option>").val(this['beruf_id']).html(this['beruf_name']));
                 });
+                if(iProfessionID != "null")
+                {
+
+                    $('#berufe').val(iProfessionID).change();
+                }
             })
 
             .fail(function () {
                 console.log("Fail");
             })
+            
+        });
 
         function getKlasse() 
         {
             localStorage.setItem("gibm_ProfessionID", $("#berufe").val());
             loadClasses($("#berufe").val());
+            $('#class').val(iClassID).change();
         }
 
         function setStundenplan()
@@ -62,19 +74,23 @@ var url = "http://sandbox.gibm.ch/berufe.php";
         function setSettings()
         {
             iProfessionID = localStorage.getItem("gibm_ProfessionID");
-            iClassID = localStorage.getItem("gibm_ClassID");   
+            iClassID = localStorage.getItem("gibm_ClassID");
         }
 
         function loadClasses(beruf_id)
         {
-            $("#class").empty().append('<option value="">Klasse auswählen</option>');
+            $("#class").empty().append('<option value="0" selected="selected">Klasse auswählen</option>');
             var url2 = "http://sandbox.gibm.ch/klassen.php?beruf_id=" + beruf_id;
             $.getJSON(url2)
                 .done(function (data) {
                     $.each(data, function () {
                         $("#class").append($("<option></option>").val(this['klasse_id']).html(this['klasse_longname']));
                     });
-
+                    
+                    if(iClassID != "null")
+                    {
+                        $('#class').val(iClassID).change();
+                    }
                 })
 
                 .fail(function () {

@@ -10,89 +10,38 @@
 </head>
 
 <body>
- <div class="container">
+    <div class="container">
 
- 
-    <label for="Beruf">Beruf auswählen:</label>
-    <select name="Beruf" id="berufe" class="form-control" onchange="getKlasse()"></select>
+        <div class="row">
+            <div class="col-6">
+                <label for="Beruf">Beruf auswählen:</label>
+                <select name="Beruf" id="berufe" class="form-control" onchange="getKlasse()"></select>
+
+            </div>
+            <div class="col-6">
+                <label for="Klasse">Klasse auswählen:</label>
+                <select name="Klasse" id="class" class="form-control" onchange="setStundenplan()"></select>
+            </div>
+        </div>
+        <div class="d-flex flex-row-reverse">
+                <button class="btn btn-primary p-2" onclick="setWeek(+1)">Nächste Woche</button>
+                <button class="btn btn-primary p-2" onclick="setWeek(-1)">Vorherige Woche</button>
+        </div>
 
 
-    <label for="Klasse">Klasse auswählen:</label>
-    <select name="Klasse" id="class" class="form-control" onchange="getStundenplan()"></select>
-    
-    <div id="stundenplanOutput">
-
+        <div class="row">
+            <div id="stundenplanOutput" class="col-12"></div>
+        </div>
     </div>
-</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>
-
+    <script src="JS/script.js"></script>
     <script>
+
         
-        var url = "http://sandbox.gibm.ch/berufe.php";
-        $("#berufe").append($("<option>Beruf auswählen</option>"));
-        $.getJSON(url)
-            .done(function (data) {
-                $.each(data, function () {
-                    $("#berufe").append($("<option></option>").val(this['beruf_id']).html(this['beruf_name']));
-                });
-
-            })
-
-            .fail(function () {
-                console.log("Fail");
-            })
-
-
-        function getKlasse() {
-            $("#class").empty().append('<option selected="selected" value="">Klasse auswählen</option>');
-            var url2 = "http://sandbox.gibm.ch/klassen.php?beruf_id=" + $("#berufe").val();
-            $.getJSON(url2)
-                .done(function (data) {
-
-                    $.each(data, function () {
-                        $("#class").append($("<option></option>").val(this['klasse_id']).html(this['klasse_longname']));
-                    });
-
-                })
-
-                .fail(function () {
-                    console.log("Fail");
-                })
-        }
-
-        function getStundenplan() {
-            var url3 = "http://sandbox.gibm.ch/tafel.php?klasse_id=" + $("#class").val();
-            var table = "";
-            $.getJSON(url3)
-                .done(function (data) {
-                    moment.locale('de');
-                    table += "<table class='table'><th scope='col'>Datum</th><th scope='col'>Wochentag</th><th scope='col'>Von-Bis</th><th scope='col'>Fach</th><th scope='col'>Lehrer</th><th scope='col'>Zimmer</th>";
-                    $.each(data, function () {
-                        
-                        moment.locale("de");
-                        var dt = moment(this['tafel_datum'], "YYYY-MM-DD HH:mm:ss")
-                        table += "<tr scope='row'>"
-                        table += "<td>" + this['tafel_datum'] + "</td>";
-                        table += "<td>" + dt.format('dddd') + "</td>";
-                        table += "<td>" + "Von " + this['tafel_von'] + " bis " +  this['tafel_bis'] + "</td>";
-                        table += "<td>" + this['tafel_longfach'] +"</td>";
-                        table += "<td>" + this['tafel_lehrer'] + "</td>";
-                        table += "<td>" + this['tafel_raum'] + "</td>";
-                        table += "</tr>";
-                    });
-                    table += "</table>";
-                    $("#stundenplanOutput").append(table);
-                })
-
-                .fail(function () {
-                    console.log("Fail");
-                })
-        }
-
     </script>
 </body>
 

@@ -1,48 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stundenplan GIBM</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Stundenplan GIBM</h1>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-6">
-                <label for="Beruf">Beruf auswählen:</label>
-                <select name="Beruf" id="berufe" class="form-control" onchange="getKlasse()"></select>
+                <label for="berufe">Beruf auswählen:</label>
+                <select name="Beruf" id="berufe" class="form-select" onchange="getKlasse()" autofocus></select>
 
             </div>
             <div class="col-6">
-                <label for="Klasse">Klasse auswählen:</label>
-                <select name="Klasse" id="class" class="form-control" onchange="setStundenplan()"></select>
+                <label for="class" id="lblClass">Klasse auswählen:</label>
+                <select name="Klasse" id="class" class="form-select" onchange="setStundenplan()"></select>
             </div>
         </div>
-        <div class="d-flex flex-row-reverse">
-                <button class="btn btn-primary p-2" onclick="setWeek(+1)">Nächste Woche</button>
-                <button class="btn btn-primary p-2" onclick="setWeek(-1)">Vorherige Woche</button>
-        </div>
 
+        <div class="row" id="btnRow">
+            <div class="col-2">
+                <button class="btn btn-primary p-2" onclick="setWeek(-1)">Vorherige Woche</button>
+            </div>
+            <div class="col-8 d-flex justify-content-center">
+                <div id="weekDate"></div>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <button class="btn btn-primary p-2" onclick="setWeek(+1)">Nächste Woche</button>
+            </div>
+        </div>
 
         <div class="row">
             <div id="stundenplanOutput" class="col-12"></div>
         </div>
+
+        <div class="modal fade" tabindex="-1" id="modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Fehler</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p id="lblErrorMessage"></p>
+                  <p>Versuchen Sie es später nochmals!</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schliessen</button>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="JS/script.js"></script>
-    <script>
-
-        
-    </script>
 </body>
 
 </html>

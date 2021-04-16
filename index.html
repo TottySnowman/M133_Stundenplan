@@ -9,29 +9,37 @@
 </head>
 
 <body>
+    <!-- Containerklasse damit es ein wenig mehr in die Mitte rückt -->
     <div class="container">
+        <!-- Zeile für den Titel -->
         <div class="row">
             <div class="col-12">
-                <h1>Stundenplan GIBM</h1>
+                <h1>Stundenplan BBZBL</h1>
             </div>
         </div>
 
+        <!-- Neue Zeile -->
         <div class="row">
+            <!-- Hälfte der Seite als Dropdown -->
             <div class="col-6">
+                <!-- Dropdown und Label für die Berufe -->
                 <label for="berufe">Beruf auswählen:</label>
                 <select name="Beruf" id="berufe" class="form-select" onchange="getKlasse()" autofocus></select>
-
             </div>
+            <!-- Andere Hälfte als Dropdown -->
             <div class="col-6">
+                <!-- Dropdown Label und Dropdown für Klasse -->
                 <label for="class" id="lblClass">Klasse auswählen:</label>
                 <select name="Klasse" id="class" class="form-select" onchange="setStundenplan()"></select>
             </div>
         </div>
 
+        <!-- Zeile für die Buttons der Woche -->
         <div class="row" id="btnRow">
             <div class="col-2">
                 <button class="btn btn-primary p-2" onclick="setWeek(-1)">Vorherige Woche</button>
             </div>
+            <!-- Wochen und Jahr anzeige -->
             <div class="col-8 d-flex justify-content-center">
                 <div id="weekDate"></div>
             </div>
@@ -40,21 +48,27 @@
             </div>
         </div>
 
+        <!-- Stundenplan Output -->
         <div class="row">
             <div id="stundenplanOutput" class="col-12"></div>
         </div>
 
+        <!-- Fehlermedlungs Popup Panel -->
         <div class="modal fade" tabindex="-1" id="modal">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
+                    <!-- Titel des Modals -->
                   <h5 class="modal-title">Fehler</h5>
+                  <!-- Button um das Modal oben rechts zuschliessen -->
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <!-- Inhalt des Popups -->
                 <div class="modal-body">
                   <p id="lblErrorMessage"></p>
                   <p>Versuchen Sie es später nochmals!</p>
                 </div>
+                <!-- Footer um das Modal zu schliessen -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schliessen</button>
                 </div>
@@ -62,6 +76,8 @@
             </div>
           </div>
     </div>
+
+    <!-- Scripte die Gebraucht werden wie jQuery, MomentJS und Bootstrap und das Script für die Funktionen der Webseite -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>

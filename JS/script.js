@@ -17,7 +17,7 @@ $(document).ready(function () {
     setSettings();
     // Methode um das JSON von einer URL zu bekommen
     $.getJSON(url)
-    // Methode die ausgeführt wird, wenn es keine Fehler gab
+        // Methode die ausgeführt wird, wenn es keine Fehler gab
         .done(function (data) {
             // Foreach für jedes Element im JSON Response
             $.each(data, function () {
@@ -56,6 +56,8 @@ $(document).ready(function () {
 function getKlasse() {
     // Setzt im LocalStorage die Berufs ID
     localStorage.setItem("gibm_ProfessionID", $("#berufe").val());
+    // Löscht die Value von der Klasse
+    localStorage.removeItem("gibm_ClassID");
     // Ruft die Methode loadClasses mit dem Wert vom Dropdown der Berufe
     loadClasses($("#berufe").val());
 }
@@ -64,6 +66,8 @@ function getKlasse() {
 function setStundenplan() {
     // Setzt im LocalStorage die Klasse ID
     localStorage.setItem("gibm_ClassID", $("#class").val());
+    // Setzt die KlasseID und BerufsID
+    setSettings();
     // Setzt die Variable auf die aktuelle Woche
     iCWeek = moment().week();
     // Ruft die Methode SetWeek damit die Woche + Jahr angezeigt wird
@@ -74,75 +78,78 @@ function setStundenplan() {
 
 // Wird in der Methode setStundenplan aufgerufen und liesst den Stundenplan von der API und zeigt ihn dann an
 function getStundenplan(classID) {
-    // Variable für die URL
-    var url3 = "http://sandbox.gibm.ch/tafel.php?klasse_id=" + classID + "&woche=" + iCWeek + "-" +iYear;
-    // Variable für die Tabelle
-    var table = "";
-    
-    // Methode um das JSON von einer URL zu bekommen
-    $.getJSON(url3)
-        // Methode die ausgeführt wird, wenn es keine Fehler gab
-        .done(function (data) {
-            // Überprüft ob die Response leer ist
-            if (data.length > 2) {
-                // Erstellt den Header für den Stundenplan
-                table += "<table class='table'><th scope='col'>Datum</th><th scope='col'>Wochentag</th><th scope='col'>Von-Bis</th><th scope='col'>Fach</th><th scope='col'>Lehrer</th><th scope='col'>Zimmer</th>";
-                // Foreach für jedes Element im JSON Response
-                $.each(data, function () {
-                    // Erstellt eine neue Zeile
-                    table += "<tr scope='row'>"
-                    // Erstellt eine Spalte mit dem Datum mit dem Format DD-MM-YYYY
-                    table += "<td>" + moment(this['tafel_datum']).format("DD-MM-YYYY") + "</td>";
-                    // Erstellt eine Spalte mit dem Wochentagname
-                    table += "<td>" + moment(this['tafel_datum']).format('dddd') + "</td>";
-                    // Erstellt eine Spalte mit von bis
-                    table += "<td>" + "Von " + this['tafel_von'] + " bis " + this['tafel_bis'] + "</td>";
-                    // Erstellt eine Spalte mit dem Fachname
-                    table += "<td>" + this['tafel_longfach'] + "</td>";
-                    // Erstellt eine Spalte mit dem Name des Lehrers
-                    table += "<td>" + this['tafel_lehrer'] + "</td>";
-                    // Erstellt eine Spalte für die Zimmer Nr
-                    table += "<td>" + this['tafel_raum'] + "</td>";
-                    // Schliesst die Zeile
-                    table += "</tr>";
-                });
-                // Schliesst die Tabelle
-                table += "</table>";
-            }
-            //Wenn die Response leer ist 
-            else {
-                // Gibt aus, dass diese Woche kein Unterricht stattfindet
-                table += "Kein Unterricht in dieser Woche";
-            }
-            // Füllt das div mit dem Stundenplan mit einem FadeIn Effekt
-            $("#stundenplanOutput").empty().append(table).fadeIn("2");
-        })
-        // Methode die ausgeführt wird, wenn ein Fehler passiert, z.B. die URL nicht existiert oder einen anderen Wert zurückgibt
-        .fail(function () {
-            // Fehlermeldung
-            fMessage = "Stundenplan kann nicht gelanden werden!";
-            // Ruft das Modalpanel auf mit der Fehlermeldung
-            displayError();
-        })
+    $("#stundenplanOutput").fadeOut("1", function () {
+        // Variable für die URL
+        var url = "http://sandbox.gibm.ch/tafel.php?klasse_id=" + classID + "&woche=" + iCWeek + "-" + iYear;
+        // Variable für die Tabelle
+        var table = "";
+
+        // Methode um das JSON von einer URL zu bekommen
+        $.getJSON(url)
+            // Methode die ausgeführt wird, wenn es keine Fehler gab
+            .done(function (data) {
+                // Überprüft ob die Response leer ist
+                if (data.length > 2) {
+                    // Erstellt den Header für den Stundenplan
+                    table += "<table class='table'><th scope='col'>Datum</th><th scope='col'>Wochentag</th><th scope='col'>Von-Bis</th><th scope='col'>Fach</th><th scope='col'>Lehrer</th><th scope='col'>Zimmer</th>";
+                    // Foreach für jedes Element im JSON Response
+                    $.each(data, function () {
+                        // Erstellt eine neue Zeile
+                        table += "<tr scope='row'>"
+                        // Erstellt eine Spalte mit dem Datum mit dem Format DD-MM-YYYY
+                        table += "<td>" + moment(this['tafel_datum']).format("DD-MM-YYYY") + "</td>";
+                        // Erstellt eine Spalte mit dem Wochentagname
+                        table += "<td>" + moment(this['tafel_datum']).format('dddd') + "</td>";
+                        // Erstellt eine Spalte mit von bis
+                        table += "<td>" + "Von " + this['tafel_von'] + " bis " + this['tafel_bis'] + "</td>";
+                        // Erstellt eine Spalte mit dem Fachname
+                        table += "<td>" + this['tafel_longfach'] + "</td>";
+                        // Erstellt eine Spalte mit dem Name des Lehrers
+                        table += "<td>" + this['tafel_lehrer'] + "</td>";
+                        // Erstellt eine Spalte für die Zimmer Nr
+                        table += "<td>" + this['tafel_raum'] + "</td>";
+                        // Schliesst die Zeile
+                        table += "</tr>";
+                    });
+                    // Schliesst die Tabelle
+                    table += "</table>";
+                }
+                //Wenn die Response leer ist 
+                else {
+                    // Gibt aus, dass diese Woche kein Unterricht stattfindet
+                    table += "Kein Unterricht in dieser Woche";
+                }
+
+                // Füllt das div mit dem Stundenplan mit einem FadeIn Effekt
+                $("#stundenplanOutput").empty().append(table).fadeIn("2");
+            })
+            // Methode die ausgeführt wird, wenn ein Fehler passiert, z.B. die URL nicht existiert oder einen anderen Wert zurückgibt
+            .fail(function () {
+                // Fehlermeldung
+                fMessage = "Stundenplan kann nicht gelanden werden!";
+                // Ruft das Modalpanel auf mit der Fehlermeldung
+                displayError();
+            })
+    });
+
 }
 // Methode setWeek switcht die Woche mit dem Parameter von einem Button
 function setWeek(count) {
     // Verschwinden des Stundenplans mit einer Callback function
-    $("#stundenplanOutput").fadeOut("1", function () {
-        // Setzt die neue Woche
-        iCWeek = iCWeek + count;
-        // 
-        // setSettings();
-        // Lädt den Stundenplan mit der ClassID
-        getStundenplan(iClassID);
-        // var mo = moment();
-        // var test = moment().day("Montag").week(iCWeek);
-        // var test2 = moment().week(iCWeek + 1).day('Sonntag');
-        // console.log(moment(test).format("YYYY-MM-DD"), test2.toString());
+    // $("#stundenplanOutput").fadeOut("1", function () {
+    // Setzt die neue Woche
+    iCWeek = iCWeek + count;
+    // 
+    // setSettings();
+    // Lädt den Stundenplan mit der ClassID
+    getStundenplan(iClassID);
+    // var mo = moment();
+    // var test = moment().day("Montag").week(iCWeek);
+    // var test2 = moment().week(iCWeek + 1).day('Sonntag');
+    // console.log(moment(test).format("YYYY-MM-DD"), test2.toString());
 
-        //Zeigt die Woche und das Jahr an 
-        $("#weekDate").empty().append(iCWeek + "-" + iYear);
-    });
+    //Zeigt die Woche und das Jahr an 
+    $("#weekDate").empty().append(iCWeek + "-" + iYear);
 
 }
 
@@ -157,10 +164,10 @@ function loadClasses(beruf_id) {
     // Löscht zuerst alle Klassen im Dropdown und fügt dann "Klasse auswählen" hinzu
     $("#class").empty().append('<option value="0" selected="selected">Klasse auswählen</option>');
     // URL für den API Call für die Klasse mit der Berufs ID
-    var url2 = "http://sandbox.gibm.ch/klassen.php?beruf_id=" + beruf_id;
+    var url = "http://sandbox.gibm.ch/klassen.php?beruf_id=" + beruf_id;
 
     // Methode um das JSON von einer URL zu bekommen
-    $.getJSON(url2)
+    $.getJSON(url)
         // Methode die ausgeführt wird, wenn es keine Fehler gab
         .done(function (data) {
             // Foreach für jedes Element im JSON Response
@@ -196,8 +203,7 @@ function loadClasses(beruf_id) {
 }
 
 // Methode um das Errorpanel anzuzeigen
-function displayError()
-{
+function displayError() {
     // Löscht zuerst die vohrige Fehlermeldung und ersetzt sie mit der neuen
     $("#lblErrorMessage").empty().append(fMessage);
     // Bekommt das Modal mit der ID
@@ -205,3 +211,9 @@ function displayError()
     // Zeigt das Popup mit Hilfe von Bootstrap
     myModal.show();
 }
+
+// function dismissError() {
+//     var myModal = new bootstrap.Modal(document.getElementById('modal'));
+//     // Zeigt das Popup mit Hilfe von Bootstrap
+//     myModal.hide();
+// }

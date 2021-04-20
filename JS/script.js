@@ -146,8 +146,7 @@ function setWeek(count) {
     // var mo = moment();
     // var test = moment().day("Montag").week(iCWeek);
     // var test2 = moment().week(iCWeek + 1).day('Sonntag');
-    // console.log(moment(test).format("YYYY-MM-DD"), test2.toString());
-
+    
     //Zeigt die Woche und das Jahr an 
     $("#weekDate").empty().append(iCWeek + "-" + iYear);
 

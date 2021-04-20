@@ -118,7 +118,7 @@ function getStundenplan(classID) {
                 //Wenn die Response leer ist 
                 else {
                     // Gibt aus, dass diese Woche kein Unterricht stattfindet
-                    table += "Kein Unterricht in dieser Woche";
+                    table += "<div class = 'alert alert-warning' > Kein Unterricht in dieser Woche</div>";
                 }
 
                 // Füllt das div mit dem Stundenplan mit einem FadeIn Effekt
@@ -136,21 +136,14 @@ function getStundenplan(classID) {
 }
 // Methode setWeek switcht die Woche mit dem Parameter von einem Button
 function setWeek(count) {
-    // Verschwinden des Stundenplans mit einer Callback function
-    // $("#stundenplanOutput").fadeOut("1", function () {
     // Setzt die neue Woche
     iCWeek = iCWeek + count;
-    // 
-    // setSettings();
+
     // Lädt den Stundenplan mit der ClassID
     getStundenplan(iClassID);
-    // var mo = moment();
-    // var test = moment().day("Montag").week(iCWeek);
-    // var test2 = moment().week(iCWeek + 1).day('Sonntag');
-    
+
     //Zeigt die Woche und das Jahr an 
     $("#weekDate").empty().append(iCWeek + "-" + iYear);
-
 }
 
 function setSettings() {

@@ -100,8 +100,9 @@ function getStundenplan(classID) {
                         table += "<td>" + moment(this['tafel_datum']).format("DD-MM-YYYY") + "</td>";
                         // Erstellt eine Spalte mit dem Wochentagname
                         table += "<td>" + moment(this['tafel_datum']).format('dddd') + "</td>";
-                        // Erstellt eine Spalte mit von bis
-                        table += "<td>" + "Von " + this['tafel_von'] + " bis " + this['tafel_bis'] + "</td>";
+                        // Erstellt eine Spalte mit von bis mit dem Format
+                        // Datum + Zeit gebraucht zum Formatieren ohne Sekunden
+                        table += "<td>" + "Von " + moment(this['tafel_datum'] + ' ' + this['tafel_von']).format('HH:mm') + " bis " + moment(this['tafel_datum'] + ' ' + this['tafel_bis']).format("HH:mm") + "</td>";
                         // Erstellt eine Spalte mit dem Fachname
                         table += "<td>" + this['tafel_longfach'] + "</td>";
                         // Erstellt eine Spalte mit dem Name des Lehrers
